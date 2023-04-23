@@ -8,7 +8,7 @@ SIG_SCAN(sigLoadingRandom, 0x1406542B1, "\x41\x8D\x50\x04\x33\xC9\xE8\x00\x00\x0
 
 extern "C" __declspec(dllexport) void Init() {
 
-	WRITE_MEMORY((char*)sigLoadingRandom() + 0x03, uint8_t, 0x05); //6
+	WRITE_MEMORY((char*)sigLoadingRandom() + 0x03, uint8_t, 5);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
