@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Steam Card Loading Screens"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Joshua's Loading Screens", "src\Joshua's Loading Screens\Joshua's Loading Screens.vcxproj", "{0E2CB959-E2A4-4D8F-853B-4C93CA380249}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vocaloid sings SEGA", "src\Vocaloid sings SEGA\Vocaloid sings SEGA.vcxproj", "{0AB3A911-8E50-4932-BF82-A0AD361A689D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{0E2CB959-E2A4-4D8F-853B-4C93CA380249}.Release|x64.Build.0 = Release|x64
 		{0E2CB959-E2A4-4D8F-853B-4C93CA380249}.Release|x86.ActiveCfg = Release|Win32
 		{0E2CB959-E2A4-4D8F-853B-4C93CA380249}.Release|x86.Build.0 = Release|Win32
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Debug|x64.ActiveCfg = Debug|x64
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Debug|x64.Build.0 = Debug|x64
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Debug|x86.ActiveCfg = Debug|Win32
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Debug|x86.Build.0 = Debug|Win32
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Release|x64.ActiveCfg = Release|x64
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Release|x64.Build.0 = Release|x64
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Release|x86.ActiveCfg = Release|Win32
+		{0AB3A911-8E50-4932-BF82-A0AD361A689D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
