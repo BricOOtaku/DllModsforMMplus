@@ -1,12 +1,13 @@
 #include <Windows.h>
+#include <random>
 
 #include "Helpers.h"
 #include "SigScan.h"
 #include "detours.h"
 #include "toml.hpp"
 
-int vocal=0;
-int cnt = 0;
+std::vector<int> order{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+
 int vocalSet = 0;
 
 int selectVocal = -1;
@@ -16,6 +17,15 @@ toml::table config;
 
 SIG_SCAN(sigAdvBg, 0x1401A9A80, "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\xC0\xFA\xFF\xFF\x48\x81\xEC\x40", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 SIG_SCAN(sigSegaLogoOgg, 0x140C7F0BC, "rom/sound/bgm/SEGAlogo_Attack_White_Ver.4.ogg", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+
+
+void shuffleOrder() {
+
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	std::shuffle(order.begin(), order.end(), g);
+}
 
 void changeVocal(unsigned char v1, unsigned char v2, unsigned char v3, unsigned char v4) {
 	
@@ -31,7 +41,7 @@ void setVocal(int vocal = -1, bool variant = false) {
 	}
 	else vocalSet %= 12;
 
-	switch (vocalSet) {
+	switch (order[vocalSet]) {
 	
 		case 1:
 			changeVocal('R', 'i', 'n', '1');
@@ -93,7 +103,7 @@ HOOK(char, __fastcall, _ADVBG, sigAdvBg(), DWORD* a1, __int64 a2, __int64 a3, __
 
 extern "C" __declspec(dllexport) void Init() {
 
-	printf("[Vocaloid sings Sega] Initializing...\n");
+	printf("[Vocaloid sings SEGA] Initializing...\n");
 	try {
 
 		config = toml::parse_file("config.toml");
@@ -106,14 +116,14 @@ extern "C" __declspec(dllexport) void Init() {
 
 			char text[1024];
 			sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-			MessageBoxA(nullptr, text, "Vocaloid sings Sega", MB_OK | MB_ICONERROR);
+			MessageBoxA(nullptr, text, "Vocaloid sings SEGA", MB_OK | MB_ICONERROR);
 		}
 	}
 	catch (std::exception& exception) {
 
 		char text[1024];
 		sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-		MessageBoxA(nullptr, text, "Vocaloid sings Sega", MB_OK | MB_ICONERROR);
+		MessageBoxA(nullptr, text, "Vocaloid sings SEGA", MB_OK | MB_ICONERROR);
 	}
 
 	if (0 <= selectVocal && selectVocal < 6) {
@@ -122,7 +132,7 @@ extern "C" __declspec(dllexport) void Init() {
 	}
 	else {
 
-		srand((unsigned int)time(NULL));
+		if(selectVocal == -2) shuffleOrder();
 		INSTALL_HOOK(_ADVBG);
 		setVocal();
 	}
