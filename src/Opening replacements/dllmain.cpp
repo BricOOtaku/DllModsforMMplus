@@ -90,7 +90,7 @@ HOOK(char, __fastcall, _ADVBG, sigAdvBg(), DWORD* a1, __int64 a2, __int64 a3, __
 
 extern "C" __declspec(dllexport) void Init() {
 
-	printf("[Opening replacementss] Initializing...\n");
+	printf("[Opening replacements] Initializing...\n");
 	try {
 
 		config = toml::parse_file("config.toml");
@@ -102,14 +102,14 @@ extern "C" __declspec(dllexport) void Init() {
 
 			char text[1024];
 			sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-			MessageBoxA(nullptr, text, "Opening replacementss", MB_OK | MB_ICONERROR);
+			MessageBoxA(nullptr, text, "Opening replacements", MB_OK | MB_ICONERROR);
 		}
 	}
 	catch (std::exception& exception) {
 
 		char text[1024];
 		sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-		MessageBoxA(nullptr, text, "Opening replacementss", MB_OK | MB_ICONERROR);
+		MessageBoxA(nullptr, text, "Opening replacements", MB_OK | MB_ICONERROR);
 	}
 
 	if (0 <= selectOpening && selectOpening < 9) {
