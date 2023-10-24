@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vocaloid sings SEGA", "src\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Opening replacements", "src\Opening replacements\Opening replacements.vcxproj", "{FDE22BA1-F558-4657-AE56-A93E16D17519}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project Sekai 3rd anniversary title screen", "src\Project Sekai 3rd anniversary title screen\Project Sekai 3rd anniversary title screen.vcxproj", "{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{FDE22BA1-F558-4657-AE56-A93E16D17519}.Release|x64.Build.0 = Release|x64
 		{FDE22BA1-F558-4657-AE56-A93E16D17519}.Release|x86.ActiveCfg = Release|Win32
 		{FDE22BA1-F558-4657-AE56-A93E16D17519}.Release|x86.Build.0 = Release|Win32
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Debug|x64.ActiveCfg = Debug|x64
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Debug|x64.Build.0 = Debug|x64
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Debug|x86.ActiveCfg = Debug|Win32
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Debug|x86.Build.0 = Debug|Win32
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Release|x64.ActiveCfg = Release|x64
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Release|x64.Build.0 = Release|x64
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Release|x86.ActiveCfg = Release|Win32
+		{AC80DC4E-6F0F-4285-B1A2-C05F574BD26A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

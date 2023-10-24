@@ -1,0 +1,2 @@
+# Project Sekai 3rd anniversary title screen
+A plugin designed for the Project Sekai 3rd anniversary title screen -with all units included- (by Galaxy Nexus-GN) which randomly set an advert screen and with the possibility to set one by default
