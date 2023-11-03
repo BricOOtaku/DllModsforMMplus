@@ -39,7 +39,7 @@ toml::v3::node_view<toml::v3::node> quirkyAura;
 toml::v3::node_view<toml::v3::node> cuteAura;
 toml::v3::node_view<toml::v3::node> classicAura;
 
-SIG_SCAN(sigStartSong, 0x1406F2820, "\x41\x54\x41\x55\x41\x57\x48\x83\xEC\x30\x4C\x8B\xFA\x45\x0F", "xxxxxxxxxxxxxxx")
+SIG_SCAN(sigStartSong, 0x14040B600, "\x41\x54\x41\x55\x41\x57\x48\x83\xEC\x30\x4C\x8B\xFA\x45\x0F", "xxxxxxxxxxxxxxx")
 SIG_SCAN(sigModifiers, 0x14027BEE0, "\x48\x8B\x01\x89\x50\x20\xC3\xCC", "xxxxxxxx")
 SIG_SCAN(sigPv, 0x14043B310, "\x8B\xD1\xE9\xA9\xE8\xFF\xFF\xCC", "xxxxxxxx")
 
@@ -106,8 +106,15 @@ void modifiers_fix(unsigned char v1 = 't', unsigned char v2 = 'x', unsigned char
 
 void bar_difficulty(unsigned char v1, unsigned char v2, unsigned char v3, unsigned char v4) {
 
-	WRITE_MEMORY(sigSongEnergyReach(), uint8_t, v1, v2, v3, v4);
-	WRITE_MEMORY(sigSongEnergyBorder(), uint8_t, v1, v2, v3, v4);
+	void* songEnergyArrays[] = {
+		sigSongEnergyReach(),
+		sigSongEnergyBorder(),
+		sigSongEnergyBase()
+	};
+
+	for (int i = 0; i < sizeof(songEnergyArrays) / sizeof(songEnergyArrays[0]); i++) {
+		WRITE_MEMORY(songEnergyArrays[i], uint8_t, v1, v2, v3, v4);
+	}
 }
 
 void combo_fine_judgements(unsigned char v1, unsigned char v2, unsigned char v3, unsigned char v4 = ' ', unsigned char v5 = ' ') {
@@ -223,7 +230,7 @@ HOOK(void, __fastcall, _Pv, sigPv(), __int64 a1) {
 
 HOOK(void, __fastcall, _StartSong, sigStartSong(), int* a1, __int64 a2, char a3) {
 
-	original_StartSong(a1, a2, a3);
+	original_StartSong(a1,a2,a3);
 	difficulty = *a1;
 
 	switch (difficulty) {
@@ -272,7 +279,7 @@ extern "C" __declspec(dllexport) void Init() {
 	}
 
 	if (hitEffect == 6) INSTALL_HOOK(_Pv);
-
+	
 	if (modifiersFix) {
 		INSTALL_HOOK(_Modifiers);
 
@@ -287,19 +294,21 @@ extern "C" __declspec(dllexport) void Init() {
 			WRITE_MEMORY(optionInfoArrays[i], uint8_t, 0x00);
 		}
 	}
-
+	
 	if (xBarRank) {
 		INSTALL_HOOK(_StartSong);
 
 		void* songEnergyArrays[] = {
 			sigSongEnergyBorderExcellent(),
 			sigSongEnergyBorderGreat(),
-			sigSongEnergyEffReach()
+			sigSongEnergyEffReach(),
+			sigSongEnergyEdgeLine()
 		};
 
 		for (int i = 0; i < sizeof(songEnergyArrays) / sizeof(songEnergyArrays[0]); i++) {
-			WRITE_MEMORY(songEnergyArrays[i], uint8_t, 0x00);
+			WRITE_MEMORY(songEnergyArrays[i], uint8_t, 'b');
 		}
+
 	}
 
 	if (enValue) {
@@ -308,10 +317,8 @@ extern "C" __declspec(dllexport) void Init() {
 
 		void* valueTextArrays[] = {
 			sigValueTextSad(),
-			sigValueTextWrong01(),
-			sigValueTextWrong02(),
-			sigValueTextWrong03(),
-			sigValueTextWrong04()
+			sigMixModeValueTextFine(),
+			sigValueTextWorst()
 		};
 
 		for (int i = 0; i < sizeof(valueTextArrays) / sizeof(valueTextArrays[0]); i++) {
@@ -352,7 +359,7 @@ extern "C" __declspec(dllexport) void Init() {
 				percentage = 'b';
 				break;
 			case 2:
-				percentage = ' ';
+				percentage = 'n';
 				break;
 			default:
 				percentage = 'p';
