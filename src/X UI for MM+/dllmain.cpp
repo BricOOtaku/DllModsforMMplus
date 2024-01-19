@@ -3,6 +3,7 @@
 #include "Helpers.h"
 #include "SigScan.h"
 #include "toml.hpp"
+#include <psapi.h>
 
 #include "SprGamCmnLayers.h"
 
@@ -42,6 +43,69 @@ toml::v3::node_view<toml::v3::node> classicAura;
 SIG_SCAN(sigStartSong, 0x14040B600, "\x41\x54\x41\x55\x41\x57\x48\x83\xEC\x30\x4C\x8B\xFA\x45\x0F", "xxxxxxxxxxxxxxx")
 SIG_SCAN(sigModifiers, 0x14027BEE0, "\x48\x8B\x01\x89\x50\x20\xC3\xCC", "xxxxxxxx")
 SIG_SCAN(sigPv, 0x14043B310, "\x8B\xD1\xE9\xA9\xE8\xFF\xFF\xCC", "xxxxxxxx")
+
+bool isDllLoaded(const char* dllName) {
+	
+	HMODULE hMods[1024];
+	DWORD cbNeeded;
+
+	if (EnumProcessModules(GetCurrentProcess(), hMods, sizeof(hMods), &cbNeeded)) {
+		for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+			char filepath[MAX_PATH];
+			if (GetModuleFileNameA(hMods[i], filepath, sizeof(filepath) / sizeof(char))) {
+				char* fileName = strrchr(filepath, '\\');
+				if (fileName) {
+					fileName++;
+				}
+				else {
+					fileName = filepath;
+				}
+
+				if (strstr(fileName, dllName) && strlen(fileName) == strlen(dllName)) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void FT_Compatibility() {
+	
+	if (isDllLoaded("ps4.dll")) {
+		printf("[X UI for MM+] ps4.dll is loaded...\n");
+	}
+	else {
+		printf("[X UI for MM+] ps4.dll is not loaded. Patching...\n");
+
+		void* FTPatchXmmArrays[] = {
+		(char*)sigPauseWin01() + 0x06,
+		sigFadeBlack(),
+		sigPrcInfo(),
+		sigKeyHelpAnm(),
+		};
+
+		void* FTPatchMmArrays[] = {
+			//(char*)sigSubBaseBg01() + 0x09, /!\Cause softlock on Custom Playlist
+			(char*)sigPrcBg() + 0x04,
+			sigSuspendArcade(),
+			sigPvIconRep03(),
+			sigPvIconRep02(),
+			sigPvIconRep01(),
+			sigPvIconShuf02(),
+			sigPvIconShuf01(),
+			sigPvInfoSong(),
+		};
+
+		for (int i = 0; i < sizeof(FTPatchXmmArrays) / sizeof(FTPatchXmmArrays[0]); i++) {
+			WRITE_MEMORY(FTPatchXmmArrays[i], uint8_t, 'x', 'm', 'm');
+		}
+
+		for (int i = 0; i < sizeof(FTPatchMmArrays) / sizeof(FTPatchMmArrays[0]); i++) {
+			WRITE_MEMORY(FTPatchMmArrays[i], uint8_t, 'm', 'm');
+		}
+	}
+}
 
 void hit_effects_0x_x(unsigned char v1 = 'e', unsigned char v2 = 'f', unsigned char v3 = 'f') {
 
@@ -277,6 +341,7 @@ extern "C" __declspec(dllexport) void Init() {
 		sprintf_s(text, "Failed to parse config.toml or hitEffects.toml:\n%s", exception.what());
 		MessageBoxA(nullptr, text, "X UI for MM+", MB_OK | MB_ICONERROR);
 	}
+	FT_Compatibility();
 
 	if (hitEffect == 6) INSTALL_HOOK(_Pv);
 	

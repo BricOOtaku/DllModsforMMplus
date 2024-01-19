@@ -74,3 +74,21 @@ SIG_SCAN(sigPEnergyNum06C, 0x140C8B470, "p_energy_num06_c", "xxxxxxxxxxxxxxxx")
 SIG_SCAN(sigPEnergyNum07C, 0x140C8B488, "p_energy_num07_c", "xxxxxxxxxxxxxxxx")
 
 SIG_SCAN(sigFailedInfo, 0x140C8A828, "failed_info", "xxxxxxxxxxx")
+
+SIG_SCAN(sigPauseWin01, 0x140CC2378, "pause_win_01", "xxxxxxxxxxxx")
+SIG_SCAN(sigFadeBlack, 0x140C822E0, "fade_black", "xxxxxxxxxx")
+SIG_SCAN(sigSubBaseBg01, 0x140C82220, "sub_base_bg_01", "xxxxxxxxxxxxxx")
+
+SIG_SCAN(sigPrcInfo, 0x140C8B668, "prc_info", "xxxxxxxx")
+SIG_SCAN(sigPrcBg, 0x140CBEB70, "prc_bg", "xxxxxx")
+SIG_SCAN(sigSuspendArcade, 0x140C8B6A8, "suspend_arcade", "xxxxxxxxxxxxxx")
+
+
+SIG_SCAN(sigKeyHelpAnm, 0x140CC1030, "keyhelp_anm", "xxxxxxxxxxx")
+SIG_SCAN(sigPvInfoSong, 0x140C83AA0, "pv_info_song", "xxxxxxxxxxxx")
+
+SIG_SCAN(sigPvIconRep03, 0x140C839D0, "pv_icon_rep03", "xxxxxxxxxxxxx")
+SIG_SCAN(sigPvIconRep02, 0x140C839F8, "pv_icon_rep02", "xxxxxxxxxxxxx")
+SIG_SCAN(sigPvIconRep01, 0x140C83A48, "pv_icon_rep01", "xxxxxxxxxxxxx")
+SIG_SCAN(sigPvIconShuf02, 0x140C83A20, "pv_icon_shuf02", "xxxxxxxxxxxxxx")
+SIG_SCAN(sigPvIconShuf01, 0x140C83970, "pv_icon_shuf01", "xxxxxxxxxxxxxx")
