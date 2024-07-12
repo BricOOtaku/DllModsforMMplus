@@ -1,10 +1,13 @@
 #include <Windows.h>
 #include <sstream>
+#include <set>
 
 #include "detours.h"
 #include "Helpers.h"
 #include "SigScan.h"
 #include "toml.hpp"
+
+#include "SprNswgamCmnLayers.h"
 
 int rnd;
 int rnd2;
@@ -12,26 +15,43 @@ uint8_t rorn = 'r';
 uint8_t txorpf[] = { 'p', 'f' };
 
 int randomLoading = 1;
-int loadingStyle = -1;
+
+toml::v3::node_view<toml::v3::node> loadingStyle;
+
 toml::table config;
+
+std::set<int> loadingStyleIndices;
 
 SIG_SCAN(sigLoadingBg, 0x140CC2158, "\x6C\x6F\x61\x64\x69\x6E\x67\x5F\x62\x67", "xxxxxxxxxx")
 SIG_SCAN(sigNowLoading, 0x140CC2128, "\x6E\x6F\x77\x5F\x6C\x6F\x61\x64\x69\x6E\x67", "xxxxxxxxxxx")
 SIG_SCAN(sigLoadingScreen, 0x140654280, "\x48\x89\x5C\x24\x00\x48\x89\x7C\x24\x00\x55\x48\x8D\xAC\x24\x00\x00\x00\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x85\x00\x00\x00\x00\x48\x8B\xF9\x45\x33\xC0\x41\x8D\x50\x04\x33\xC9\xE8\x00\x00\x00\x00\x8B\xD8\x48\x8D\x15\x00\x00\x00\x00", "xxxx?xxxx?xxxxx????xxx????xxx????xxxxxx????xxxxxxxxxxxxx????xxxxx????")
 
-SIG_SCAN(sigRightsList, 0x140CC21E8, "rights_list", "xxxxxxxxxxx")
-SIG_SCAN(sigRightsBg01, 0x140CC2178, "rights_bg01", "xxxxxxxxxx?x")
-SIG_SCAN(sigRightsBg02, 0x140CC2168, "rights_bg02", "xxxxxxxxxx?x")
+void generateArray() {
 
-SIG_SCAN(sigRightsBaseMan, 0x140CC2208, "rights_base_man", "xxxxxxxxxxxxxxx")
-SIG_SCAN(sigRightsBaseArr, 0x140CC2218, "rights_base_arr", "xxxxxxxxxxxxxxx")
-SIG_SCAN(sigRightsBaseLyr, 0x140CC2228, "rights_base_lyr", "xxxxxxxxxxxxxxx")
-SIG_SCAN(sigRightsBaseMus, 0x140CC21A8, "rights_base_mus", "xxxxxxxxxxxxxxx")
-SIG_SCAN(sigRightsBasePv, 0x140CC2250, "rights_base_pv", "xxxxxxxxxxxxxx")
-SIG_SCAN(sigRightsBaseGui, 0x140CC21F8, "rights_base_gui", "xxxxxxxxxxxxxxx")
+	if (loadingStyle.is_array()) {
+		//Add values based on Loading_Style from config.toml
+		for (const auto& value : *loadingStyle.as_array()) {
+			if (value.is_integer()) {
+				int64_t style = value.as_integer()->get();
 
-SIG_SCAN(sigPRightsName02dLt, 0x140CC2238, "p_rights_name%02d_lt", "xxxxxxxxxxxxxxxxxxxx")
-SIG_SCAN(sigPRightsSongLt, 0x140CC21D0, "p_rights_song_lt", "xxxxxxxxxxxxxxxx")
+				switch (style) {
+				case 0: // M39
+				case 1: // X
+				case 2: // FT
+				case 3: // F2nd
+				case 4: // F
+				case 5: // DT2nd&DTEx(PS3)
+				case 6: // 2nd&Ex(PSP)
+				case 7: // DT
+					loadingStyleIndices.insert(static_cast<int>(style));
+					break;
+				default:
+					continue; // Just ignore if invalid
+				}
+			}
+		}
+	}
+}
 
 void load_bg(unsigned char v1, unsigned char v2, unsigned char v3, unsigned char v4) {
 
@@ -42,10 +62,10 @@ void load_bg(unsigned char v1, unsigned char v2, unsigned char v3, unsigned char
 	sstream << std::hex << v3;
 	sstream << std::hex << v4;
 	std::string result = sstream.str();
-	unsigned char V1 = zeroX + v1;
-	unsigned char V2 = zeroX + v2;
-	unsigned char V3 = zeroX + v3;
-	unsigned char V4 = zeroX + v4;
+	unsigned char V1 = zeroX + static_cast<unsigned char>(v1);
+	unsigned char V2 = zeroX + static_cast<unsigned char>(v2);
+	unsigned char V3 = zeroX + static_cast<unsigned char>(v3);
+	unsigned char V4 = zeroX + static_cast<unsigned char>(v4);
 	WRITE_MEMORY((char*)sigLoadingBg() + 0x04, uint8_t, 'b', 'g', V1, V2, V3, V4);
 }
 
@@ -60,13 +80,27 @@ void random_bg() {
 	int third = rnd / 10;
 	rnd = rnd % 10;
 	int fourth = rnd;
-	load_bg(first, second, third, fourth);
+	load_bg(static_cast<unsigned char>(first), static_cast<unsigned char>(second), static_cast<unsigned char>(third), static_cast<unsigned char>(fourth));
 }
 
-void set_load_style(int x1) {
-
+void set_load_style() {
 	uint8_t loadStyle[3];
-	switch (x1) {
+
+	if (loadingStyleIndices.empty()) {
+
+		printf("[Complete Loading Screen Customizable for MM+] Warning : No loading style set. Using default values. Please check values in Loading_Style in config.toml.\n");
+
+		// Use default values if Loading_Style from config.toml is empty
+		for (int i = 0; i <= 7; i++) {
+			loadingStyleIndices.insert(i);
+		}
+	}
+
+	auto it = loadingStyleIndices.begin();
+	std::advance(it, rand() % loadingStyleIndices.size());
+	int randomStyle = *it;
+
+	switch (randomStyle) {
 
 	case 1: //X
 		loadStyle[0] = 'p', loadStyle[1] = 'j', loadStyle[2] = 'x';
@@ -105,7 +139,7 @@ void set_load_style(int x1) {
 
 	WRITE_MEMORY(sigNowLoading(), uint8_t, loadStyle[0], loadStyle[1], loadStyle[2]);
 
-	if (x1 != 0) {
+	if (randomStyle != 0) {
 		rorn = 'n';
 		txorpf[0] = 'p', txorpf[1] = 'f';
 	}
@@ -126,40 +160,31 @@ void set_load_style(int x1) {
 		(char*)sigPRightsName02dLt() + 0x02,
 		(char*)sigPRightsSongLt() + 0x02,
 	};
-	
+
 	for (int i = 0; i < sizeof(RornArrays) / sizeof(RornArrays[0]); i++) {
 		WRITE_MEMORY(RornArrays[i], uint8_t, rorn);
 	}
-}
-
-void random_load() {
-
-	rnd2 = (rand() % 7);
-	set_load_style(rnd2);
 }
 
 HOOK(__int64, __fastcall, _LoadingScreen, sigLoadingScreen(), int a1) {
 
 	original_LoadingScreen(a1);
 	random_bg();
-
-	if (loadingStyle == -1) //Set to Random
-	{
-		random_load();
-	}
+	set_load_style();
 	return 0;
 }
 
 extern "C" __declspec(dllexport) void Init() {
 
 	printf("[Complete Loading Screen Customizable for MM+] Initializing...\n");
+	
 	try {
 
 		config = toml::parse_file("config.toml");
 		try {
 
 			randomLoading = config["Random_Loading"].value_or(0);
-			loadingStyle = config["Loading_Style"].value_or(0);
+			loadingStyle = config["Loading_Style"];
 		}
 		catch (std::exception& exception) {
 
@@ -185,11 +210,9 @@ extern "C" __declspec(dllexport) void Init() {
 	}
 
 	srand(time(NULL));
+	generateArray();
 	random_bg();
-
-	if (loadingStyle != -1) {
-		set_load_style(loadingStyle);
-	}
+	set_load_style();
 
 	INSTALL_HOOK(_LoadingScreen);
 }
