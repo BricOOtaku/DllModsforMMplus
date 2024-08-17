@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Steam Card Loading Screens"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Joshua's Loading Screens", "src\Joshua's Loading Screens\Joshua's Loading Screens.vcxproj", "{0E2CB959-E2A4-4D8F-853B-4C93CA380249}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vocaloid sings SEGA", "src\Vocaloid sings SEGA\Vocaloid sings SEGA.vcxproj", "{0AB3A911-8E50-4932-BF82-A0AD361A689D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vocaloids sing SEGA +", "src\Vocaloids sing SEGA +\Vocaloids sing SEGA +.vcxproj", "{0AB3A911-8E50-4932-BF82-A0AD361A689D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Opening replacements", "src\Opening replacements\Opening replacements.vcxproj", "{FDE22BA1-F558-4657-AE56-A93E16D17519}"
 EndProject

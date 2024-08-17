@@ -1,0 +1,2 @@
+SIG_SCAN(sigAdvBg, 0x1401A9A80, "\x48\x89\x5C\x24\x10\x48\x89\x74\x24\x18\x48\x89\x7C\x24\x20\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\xC0\xFA\xFF\xFF\x48\x81\xEC\x40", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+SIG_SCAN(sigSegaLogoOgg, 0x140C7F0BC, "rom/sound/bgm/SEGAlogo_Attack_White_Ver.4.ogg", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")

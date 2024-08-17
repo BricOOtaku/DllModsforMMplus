@@ -1,0 +1,2 @@
+# Vocaloids-sing-SEGA-Plus
+A plugin designed for the Vocaloids sing SEGA Plus mod (by Sh1r8) which reproduces the vocal order on the adv from F/F2nd/X and with the possibility to set a vocal by default with the normal or alt version
