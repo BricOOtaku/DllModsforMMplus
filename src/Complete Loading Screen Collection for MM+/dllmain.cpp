@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <sstream>
 #include <set>
+#include <iostream>
 
 #include "detours.h"
 #include "Helpers.h"
@@ -114,7 +115,7 @@ void random_bg() {
 
 	if (loadingScreenIndices.empty()) {
 
-		printf("[Complete Loading Screen Collection for MM+] Warning : No loading screen set. Using default values (0-1018). Please check values in both Random_Loading and Blacklist in config.toml.\n");
+		std::cerr << "[Complete Loading Screen Collection for MM+] Warning : No loading screen set. Using default values (0-1018). Please check values in both Random_Loading and Blacklist in config.toml." << std::endl;
 
 		// Use an array from 0 to 1018 if Random_Loading from config.toml is empty
 		for (int i = 0; i <= 1018; i++) {
@@ -137,12 +138,12 @@ void random_bg() {
 }
 
 void set_load_style() {
+	
 	uint8_t loadStyle[3];
 
 	if (loadingStyleIndices.empty()) {
 		
-		printf("[Complete Loading Screen Collection for MM+] Warning : No loading style set. Using default values. Please check values in Loading_Style in config.toml.\n");
-
+		std::cerr << "[Complete Loading Screen Collection for MM+] Warning : No loading style set. Using default values. Please check values in Loading_Style in config.toml." << std::endl;
 		// Use default values if Loading_Style from config.toml is empty
 		for (int i = 0; i <= 7; i++) {
 			loadingStyleIndices.insert(i);
@@ -227,31 +228,28 @@ HOOK(__int64, __fastcall, _LoadingScreen, sigLoadingScreen(), int a1) {
 	return 0;
 }
 
+void handleParseException(const std::exception& exception) {
+
+	std::cerr << "Failed to parse config.toml: " << exception.what() << std::endl;
+	MessageBoxA(nullptr, ("Failed to parse config.toml:\n" + std::string(exception.what())).c_str(), "Complete Loading Screen Collection for MM+", MB_OK | MB_ICONERROR);
+}
+
 extern "C" __declspec(dllexport) void Init() {
 
-	printf("[Complete Loading Screen Collection for MM+] Initializing...\n");
-
+	std::cerr << "[Complete Loading Screen Collection for MM+] Initializing... " << std::endl;
 	try {
-
 		config = toml::parse_file("config.toml");
 		try {
-			
 			randomLoading = config["Random_Loading"]; 
 			loadingStyle = config["Loading_Style"]; 
 			blacklist = config["Blacklist"];
 		}
 		catch (std::exception& exception) {
-
-			char text[1024];
-			sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-			MessageBoxA(nullptr, text, "Complete Loading Screen Collection for MM+", MB_OK | MB_ICONERROR);
+			handleParseException(exception);
 		}
 	}
 	catch (std::exception& exception) {
-
-		char text[1024];
-		sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-		MessageBoxA(nullptr, text, "Complete Loading Screen Collection for MM+", MB_OK | MB_ICONERROR);
+		handleParseException(exception);
 	}
 
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -264,6 +262,5 @@ extern "C" __declspec(dllexport) void Init() {
 
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-
 	return TRUE;
 }

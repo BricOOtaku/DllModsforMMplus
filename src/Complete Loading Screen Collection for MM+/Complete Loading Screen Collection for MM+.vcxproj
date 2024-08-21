@@ -160,6 +160,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies\detours;$(SolutionDir)dependencies</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <UseFullPaths>false</UseFullPaths>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

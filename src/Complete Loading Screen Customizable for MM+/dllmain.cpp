@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <sstream>
 #include <set>
+#include <iostream>
 
 #include "detours.h"
 #include "Helpers.h"
@@ -84,12 +85,12 @@ void random_bg() {
 }
 
 void set_load_style() {
+	
 	uint8_t loadStyle[3];
 
 	if (loadingStyleIndices.empty()) {
 
-		printf("[Complete Loading Screen Customizable for MM+] Warning : No loading style set. Using default values. Please check values in Loading_Style in config.toml.\n");
-
+		std::cerr << "[Complete Loading Screen Customizable for MM+] Warning : No loading style set. Using default values. Please check values in Loading_Style in config.toml." << std::endl;
 		// Use default values if Loading_Style from config.toml is empty
 		for (int i = 0; i <= 7; i++) {
 			loadingStyleIndices.insert(i);
@@ -174,42 +175,37 @@ HOOK(__int64, __fastcall, _LoadingScreen, sigLoadingScreen(), int a1) {
 	return 0;
 }
 
+void handleParseException(const std::exception& exception) {
+
+	std::cerr << "Failed to parse config.toml: " << exception.what() << std::endl;
+	MessageBoxA(nullptr, ("Failed to parse config.toml:\n" + std::string(exception.what())).c_str(), "Complete Loading Screen Customizable for MM+", MB_OK | MB_ICONERROR);
+}
+
 extern "C" __declspec(dllexport) void Init() {
 
-	printf("[Complete Loading Screen Customizable for MM+] Initializing...\n");
-	
+	std::cerr << "[Complete Loading Screen Customizable for MM+] Initializing... " << std::endl;
 	try {
-
 		config = toml::parse_file("config.toml");
 		try {
-
 			randomLoading = config["Random_Loading"].value_or(0);
 			loadingStyle = config["Loading_Style"];
 		}
 		catch (std::exception& exception) {
-
-			char text[1024];
-			sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-			MessageBoxA(nullptr, text, "Complete Loading Screen Customizable for MM+", MB_OK | MB_ICONERROR);
+			handleParseException(exception);
 		}
 	}
 	catch (std::exception& exception) {
-
-		char text[1024];
-		sprintf_s(text, "Failed to parse config.toml:\n%s", exception.what());
-		MessageBoxA(nullptr, text, "Complete Loading Screen Customizable for MM+", MB_OK | MB_ICONERROR);
+		handleParseException(exception);
 	}
 
 	if (randomLoading < 1) {
-
 		randomLoading = 1;
 	}
 	else if (randomLoading > 1019) {
-
 		randomLoading = 1019;
 	}
 
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 	generateArray();
 	random_bg();
 	set_load_style();
@@ -217,8 +213,6 @@ extern "C" __declspec(dllexport) void Init() {
 	INSTALL_HOOK(_LoadingScreen);
 }
 
-
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-
 	return TRUE;
 }
