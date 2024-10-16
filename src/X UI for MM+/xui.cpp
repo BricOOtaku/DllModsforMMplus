@@ -6,6 +6,10 @@
 #include "toml.hpp"
 #include "xui.h"
 
+typedef int i32;
+typedef i32(__cdecl* IsFutureToneProc)();
+auto IsFutureToneAddress = reinterpret_cast<IsFutureToneProc>(sigIsFutureTone());
+
 __int8 modifiers;
 __int8 difficulty;
 __int8 hitEffect;
@@ -54,33 +58,9 @@ void WriteInMemory(std::vector<void*> Arrays, int Offset, std::initializer_list<
 	}
 }
 
-bool isDllLoaded(const std::string& dllName) {
-    std::vector<HMODULE> hMods(1024);
-    DWORD cbNeeded;
-
-    if (EnumProcessModules(GetCurrentProcess(), hMods.data(), static_cast<DWORD>(hMods.size() * sizeof(HMODULE)), &cbNeeded)) {
-        for (size_t i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
-            char filepath[MAX_PATH];
-            if (GetModuleFileNameA(hMods[i], filepath, sizeof(filepath) / sizeof(char))) {
-                std::string fileName = std::strrchr(filepath, '\\') ? std::strrchr(filepath, '\\') + 1 : filepath;
-
-                if (fileName == dllName) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 void FT_Compatibility() {
 
-	if (isDllLoaded("ps4.dll")) {
-		std::cerr << "[X UI for MM+] ps4.dll is loaded..." << std::endl;
-	}
-	else {
-		std::cerr << "[X UI for MM+] ps4.dll is not loaded. Patching..." << std::endl;
-
+	if (!IsFutureToneAddress()) {
 		WriteInMemory(FTPatchXmmArrays, 0, { 'x', 'm', 'm' });
 		WriteInMemory(FTPatchMmArrays, 0, { 'm', 'm' });
 	}
@@ -297,7 +277,6 @@ extern "C" __declspec(dllexport) void Init() {
 	catch (std::exception& exception) {
 		handleParseException(exception);
 	}
-	FT_Compatibility();
 
 	if (hitEffect == 6) INSTALL_HOOK(_Pv);
 
@@ -368,4 +347,10 @@ extern "C" __declspec(dllexport) void Init() {
 
 	if (coloredTarget) setColoredTarget();
 	if (smallerTarget) setSmallerTarget();
+}
+
+//Use of PostInit() to check that the FT UI is used beforehand
+extern "C" __declspec(dllexport) void PostInit() {
+	
+	FT_Compatibility();
 }

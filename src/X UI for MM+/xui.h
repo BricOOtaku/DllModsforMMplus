@@ -88,6 +88,8 @@ SIG_SCAN(sigPEnergyNum07C, 0x140C8B488, "p_energy_num07_c", "xxxxxxxxxxxxxxxx")
 
 
 //Failed and Patch for FT / MM UI compatibility
+SIG_SCAN(sigIsFutureTone, 0x1402B8050, "\x0F\xB6\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x0F\xB6\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x0F\xB6\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x80\x3D", "xxx????xxxxxxxxxxxx????xxxxxxxxxxxx????xxxxxxxxxxx")
+
 SIG_SCAN(sigFailedInfo, 0x140C8A828, "failed_info", "xxxxxxxxxxx")
 
 SIG_SCAN(sigPauseWin01, 0x140CC2378, "pause_win_01", "xxxxxxxxxxxx")
