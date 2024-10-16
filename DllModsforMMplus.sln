@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project Sekai 3rd anniversa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project Mirai Combo SE", "src\Project Mirai Combo SE\Project Mirai Combo SE.vcxproj", "{EC5A9E82-7CF0-47F6-A662-966A4D4093AB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Title Screen Voice Announcement", "src\Title Screen Voice Announcement\Title Screen Voice Announcement.vcxproj", "{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -121,6 +123,14 @@ Global
 		{EC5A9E82-7CF0-47F6-A662-966A4D4093AB}.Release|x64.Build.0 = Release|x64
 		{EC5A9E82-7CF0-47F6-A662-966A4D4093AB}.Release|x86.ActiveCfg = Release|Win32
 		{EC5A9E82-7CF0-47F6-A662-966A4D4093AB}.Release|x86.Build.0 = Release|Win32
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Debug|x64.ActiveCfg = Debug|x64
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Debug|x64.Build.0 = Debug|x64
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Debug|x86.ActiveCfg = Debug|Win32
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Debug|x86.Build.0 = Debug|Win32
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Release|x64.ActiveCfg = Release|x64
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Release|x64.Build.0 = Release|x64
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Release|x86.ActiveCfg = Release|Win32
+		{8FEC0FB4-29A9-40E6-AF25-D1D3FB591007}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
