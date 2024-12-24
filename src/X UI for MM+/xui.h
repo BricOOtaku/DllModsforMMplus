@@ -5,7 +5,8 @@
 //Hook
 SIG_SCAN(sigStartSong, 0x14040B600, "\x41\x54\x41\x55\x41\x57\x48\x83\xEC\x30\x4C\x8B\xFA\x45\x0F", "xxxxxxxxxxxxxxx")
 SIG_SCAN(sigModifiers, 0x14027BEE0, "\x48\x8B\x01\x89\x50\x20\xC3\xCC", "xxxxxxxx")
-SIG_SCAN(sigPv, 0x14043B310, "\x8B\xD1\xE9\xA9\xE8\xFF\xFF\xCC", "xxxxxxxx")
+SIG_SCAN(sigPvId, 0x140259E30, "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\x00\x00\x00\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x85\x00\x00\x00\x00\x48\x8B\xF9\xE8", "xxxx?xxxx?xxxx?xxxxxxxxxxxxx????xxx????xxx????xxxxxx????xxxx")	
+SIG_SCAN(sigSongInfo, 0x14040B2A0, "\x48\x8D\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x57\x48\x83\xEC\x00\x33\xED", "xxx????xxxxxxxxxxxxx?xxxx?xxxx?xxxx?xx")
 
 
 //Hit Effects
@@ -268,8 +269,28 @@ SIG_SCAN(sigWhiteSlideL18R, 0x140C8A1E0, "white_slide_l18_r", "xxxxxxxxxxxxxxxxx
 SIG_SCAN(sigWhiteSlideS25L, 0x140C8A1F8, "white_slide_s25_l", "xxxxxxxxxxxxxxxxx")
 SIG_SCAN(sigWhiteSlideS25R, 0x140C8A1B8, "white_slide_s25_r", "xxxxxxxxxxxxxxxxx")
 
+//Frame
+SIG_SCAN(sigFrameUpFt, 0x140C8AEA8, "frame_up", "xxxxxxxx")
+SIG_SCAN(sigFrameBottomFt, 0x140C8AD78, "frame_bottom", "xxxxxxxxxxxx")
+SIG_SCAN(sigFrameUpDangerFt, 0x140C8AE80, "frame_up_danger", "xxxxxxxxxxxxxxx")
+SIG_SCAN(sigFrameBottomDangerFt, 0x140C8AEB8, "frame_bottom_danger", "xxxxxxxxxxxxxxxxxxx")
+
+// Slide Animation of UI
+SIG_SCAN(sigSlideFrame, 0x140274E69, "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xC0\x75\x00\xC7\x81", "xx????????x????xxx?xx")
+
+// Priority Layers
+SIG_SCAN(sigFrame, 0x140278087, "\x44\x8D\x46\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x89\x47", "xxx?xxxx????xx")
+SIG_SCAN(sigChanceFrame, 0x151300C6E, "\x44\x8D\x42\x00\xE8\x00\x00\x00\x00\x48\x8D\x4F\x00\x89\x47", "xxx?x????xxx?xx")
+
 
 // Arrays
+std::vector<void*> FrameUpBottomArrays = {
+	sigFrameUpFt(),
+	sigFrameBottomFt(),
+	sigFrameUpDangerFt(),
+	sigFrameBottomDangerFt(),
+};
+
 std::vector<void*> FTPatchXmmArrays = {
 	(char*)sigPauseWin01() + 0x06,
 	sigFadeBlack(),
@@ -287,6 +308,11 @@ std::vector<void*> FTPatchMmArrays = {
 	sigPvIconShuf02(),
 	sigPvIconShuf01(),
 	sigPvInfoSong(),
+};
+
+std::vector<void*> FTPatchUIArrays = {
+	//0x140C7F88C,
+	//0x140C7F890,
 };
 
 std::vector<void*> HitEffLArrays = {
@@ -309,7 +335,7 @@ std::vector<void*> HitEffArrays = {
 	sigHitEffSlide01R()
 };
 
-std::vector<void*> songEnergyAArrays = {
+std::vector<void*> songEnergyArrays = {
 	sigSongEnergyReach(),
 	sigSongEnergyBorder(),
 	sigSongEnergyBase()
