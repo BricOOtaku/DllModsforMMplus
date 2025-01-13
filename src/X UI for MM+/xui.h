@@ -1,13 +1,11 @@
-#include <Windows.h>
-#include <vector>
 #include "SigScan.h"
 
 //Hook
 SIG_SCAN(sigStartSong, 0x14040B600, "\x41\x54\x41\x55\x41\x57\x48\x83\xEC\x30\x4C\x8B\xFA\x45\x0F", "xxxxxxxxxxxxxxx")
-SIG_SCAN(sigModifiers, 0x14027BEE0, "\x48\x8B\x01\x89\x50\x20\xC3\xCC", "xxxxxxxx")
-SIG_SCAN(sigPvId, 0x140259E30, "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\x00\x00\x00\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x85\x00\x00\x00\x00\x48\x8B\xF9\xE8", "xxxx?xxxx?xxxx?xxxxxxxxxxxxx????xxx????xxx????xxxxxx????xxxx")	
+SIG_SCAN(sigPvId, 0x140259E30, "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\x00\x00\x00\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x85\x00\x00\x00\x00\x48\x8B\xF9\xE8", "xxxx?xxxx?xxxx?xxxxxxxxxxxxx????xxx????xxx????xxxxxx????xxxx")
 SIG_SCAN(sigSongInfo, 0x14040B2A0, "\x48\x8D\x05\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x48\x89\x5C\x24\x00\x48\x89\x6C\x24\x00\x48\x89\x74\x24\x00\x57\x48\x83\xEC\x00\x33\xED", "xxx????xxxxxxxxxxxxx?xxxx?xxxx?xxxx?xx")
-
+SIG_SCAN(sigGetRomDirAddr, 0x1402A2417, "\xE8\x00\x00\x00\x00\x33\xF6\x48\x89\x75\x00\x48\x89\x75\x00\xBF", "x????xxxxx?xxx?x")
+SIG_SCAN(sigPvDbRead, 0x1404BB290, "\x48\x89\x5C\x24\x00\x48\x89\x74\x24\x00\x48\x89\x7C\x24\x00\x55\x41\x54\x41\x55\x41\x56\x41\x57\x48\x8D\xAC\x24\x00\x00\x00\x00\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x85\x00\x00\x00\x00\x48\x8B\xF1\x8B\x51", "xxxx?xxxx?xxxx?xxxxxxxxxxxxx????xxx????xxx????xxxxxx????xxxxx")
 
 //Hit Effects
 SIG_SCAN(sigHitEff00, 0x140C88450, "hit_eff00", "xxxxxxxxx")
@@ -26,9 +24,6 @@ SIG_SCAN(sigHitEffSlide01R, 0x140C8A308, "hit_eff_slide01_r", "xxxxxxxxxxxxxxxxx
 
 
 //Bottom
-SIG_SCAN(sigSongEnergyClearTxt, 0x140C8ACB0, "song_energy_clear_txt", "xxxxxxxxxxxxxxxxxxxxx")
-SIG_SCAN(sigPrcGaugeBaseArcade, 0x140CC0F40, "prc_gauge_base_arcade", "xxxxxxxxxxxxxxxxxxxxx")
-
 SIG_SCAN(sigSongEnergyReach, 0x140C8AD10, "song_energy_reach", "xxxxxxxxxxxxxxxxx")
 SIG_SCAN(sigSongEnergyBorder, 0x140C8ADA0, "song_energy_border\000", "xxxxxxxxxxxxxxxxxxx")
 SIG_SCAN(sigSongEnergyBase, 0x140C8AD28, "song_energy_base", "xxxxxxxxxxxxxxxx")
@@ -53,11 +48,6 @@ SIG_SCAN(sigMixModeValueTextFine, 0x140CBF108, "value_text_fine", "xxxxxxxxxxxxx
 
 SIG_SCAN(sigValueTextSad, 0x140C8AA98, "value_text_sad", "xxxxxxxxxxxxxx")
 SIG_SCAN(sigValueTextWorst, 0x140C8AA68, "value_text_worst", "xxxxxxxxxxxxxxxx")
-
-SIG_SCAN(sigOptionInfoHiddenA, 0x140C8B188, "option_info_hidden_a", "xxxxxxxxxxxxxxxxxxxx")
-SIG_SCAN(sigOptionInfoHispeedA, 0x140C8B1B8, "option_info_hispeed_a", "xxxxxxxxxxxxxxxxxxxxx")
-SIG_SCAN(sigOptionInfoSuddenA, 0x140C8B158, "option_info_sudden_a", "xxxxxxxxxxxxxxxxxxxx")
-SIG_SCAN(sigOptionInfoBase, 0x140C8B1A0, "option_info_base", "xxxxxxxxxxxxxxxx")
 
 SIG_SCAN(sigSongEnergyBorderExcellent, 0x140C8AE10, "song_energy_border_excellent", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 SIG_SCAN(sigSongEnergyBorderGreat, 0x140C8ADF0, "song_energy_border_great", "xxxxxxxxxxxxxxxxxxxxxxxx")
@@ -278,6 +268,9 @@ SIG_SCAN(sigFrameBottomDangerFt, 0x140C8AEB8, "frame_bottom_danger", "xxxxxxxxxx
 // Slide Animation of UI
 SIG_SCAN(sigSlideFrame, 0x140274E69, "\xC7\x81\x00\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x84\xC0\x75\x00\xC7\x81", "xx????????x????xxx?xx")
 
+// Modifiers Animation
+SIG_SCAN(sigModifiersAnimation, 0x140279324, "\x4C\x8D\x45\x00\xBA\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x4C\x8D\x45\x00\xBA\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x4C\x8D\x45\x00\xBA\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x4C\x8D\x45\x00\xBA\x00\x00\x00\x00\x48\x8B\xCB\xE8\x00\x00\x00\x00\x48\x8B\x4D", "xxx?x????xxxx????xxx?x????xxxx????xxx?x????xxxx????xxx?x????xxxx????xxx")
+
 // Priority Layers
 SIG_SCAN(sigFrame, 0x140278087, "\x44\x8D\x46\x00\x48\x8B\xCF\xE8\x00\x00\x00\x00\x89\x47", "xxx?xxxx????xx")
 SIG_SCAN(sigChanceFrame, 0x151300C6E, "\x44\x8D\x42\x00\xE8\x00\x00\x00\x00\x48\x8D\x4F\x00\x89\x47", "xxx?x????xxx?xx")
@@ -387,13 +380,6 @@ std::vector<void*> buttonArrays = {
 		sigTargetSpSlide01Notxt(), sigTargetSpSlide18L(), sigTargetSpSlide18R(), sigTargetSpSlide18LSync(), sigTargetSpSlide18RSync(),
 		sigShadowSlideL18L(), sigShadowSlideL18R(), sigShadowSlideS25L(), sigShadowSlideS25R(),
 		sigWhiteSlideL18L(), sigWhiteSlideL18R(), sigWhiteSlideS25L(), sigWhiteSlideS25R()
-};
-
-std::vector<void*> optionInfoArrays = {
-	sigOptionInfoHiddenA(),
-	sigOptionInfoHispeedA(),
-	sigOptionInfoSuddenA(),
-	sigOptionInfoBase()
 };
 
 std::vector<void*> songEnergyBArrays = {
