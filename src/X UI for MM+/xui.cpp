@@ -1,4 +1,4 @@
-#include <Windows.h> 
+#include <Windows.h>
 #include <iostream>
 #include <random>
 #include <set>
@@ -33,8 +33,8 @@ const int sknMax = 57;
 const int idMax = 65535;
 bool isParsed = false;
 
-std::set<std::string> hitEffectsKeys = { "Default", "Classic", "Cute", "Cool", "Elegant", "Quirky" };
-std::vector<std::string> hitEffectsVec(hitEffectsKeys.begin(), hitEffectsKeys.end());
+std::vector<std::string> hitEffectsVec = { "Default", "Classic", "Cute", "Cool", "Elegant", "Quirky" };
+std::set<std::string> hitEffectsKeys(hitEffectsVec.begin(), hitEffectsVec.end());
 std::vector<toml::table> parsedSkinsTables;
 std::map<int, std::set<int>> parsedSkins;
 
