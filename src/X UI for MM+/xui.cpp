@@ -29,7 +29,7 @@ uintptr_t FramePriorityOffset = 0x0C;
 toml::v3::node_view<toml::v3::node> skinsList;
 std::vector<int> skinsIndices;
 
-const int sknMax = 57;
+const int sknMax = 58;
 const int idMax = 65535;
 bool isParsed = false;
 
@@ -177,9 +177,9 @@ void fixFrameSkinSlide(__int8 skn = -1) {
         frameValueBtm += 5000000;
         break;
     case 11: case 12: case 13: case 17: case 20: case 21: case 25:
-    case 27: case 28: case 29: case 30: case 35: case 37:
-    case 38: case 39: case 40: case 41: case 42: case 43:
-    case 46: case 47: case 48: case 49: case 56: case 57:
+    case 27: case 28: case 29: case 30: case 35: case 37: case 38:
+    case 39: case 40: case 41: case 42: case 43: case 46: case 47:
+    case 48: case 49: case 56: case 57: case 58:
         chanceValueBtm += 6000000;
         frameValueBtm += 6000000;
         break;
@@ -218,7 +218,7 @@ void generateSkinsArray() {
         for (const auto& value : *config["Skins_List"].as_array()) {
             if (value.is_integer()) {
                 int index = static_cast<int>(value.as_integer()->get());
-                if (index >= 0 && index <= 57) {
+                if (index >= 0 && index <= sknMax) {
                     uniqueIndices.insert(index);
                 }
                 else {
@@ -229,7 +229,7 @@ void generateSkinsArray() {
     }
 
     if (uniqueIndices.empty()) {
-        for (int i = 0; i <= 57; i++) {
+        for (int i = 0; i <= sknMax; i++) {
             uniqueIndices.insert(i);
         }
     }
@@ -496,6 +496,7 @@ void checkOptionValues() {
 extern "C" __declspec(dllexport) void Init() {
 
     std::cerr << "[X UI for MM+] Initializing..." << std::endl;
+
     try {
         config = toml::parse_file("config.toml");
         try {
@@ -577,8 +578,8 @@ extern "C" __declspec(dllexport) void Init() {
 
     patchLayersPriority((char*)sigFrame()); // frame_bottom 0x140278087
     patchLayersPriority((char*)sigFrame() + 0x151); // frame_top 0x1402781D8
-    patchLayersPriority((char*)sigChanceFrame()); // chance_frame_bottom 0x151300C6E
-    patchLayersPriority((char*)sigChanceFrame() + 0x51); // chance_frame_top 0x151300CBF
+    // chance_frame_bottom 0x151300C6E
+    // chance_frame_top 0x151300CBF
 
     fixModifiersAnim((char*)sigModifiersAnimation()); // base 0x140279324
     fixModifiersAnim((char*)sigModifiersAnimation() + 0x11); // hi-speed 0x0x140279335
