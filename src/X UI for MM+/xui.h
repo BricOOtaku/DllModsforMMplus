@@ -382,11 +382,17 @@ std::vector<void*> buttonArrays = {
 		sigWhiteSlideL18L(), sigWhiteSlideL18R(), sigWhiteSlideS25L(), sigWhiteSlideS25R()
 };
 
-std::vector<void*> songEnergyBArrays = {
+std::vector<void*> songEnergyBrArrays = {
 	sigSongEnergyBorderExcellent(),
 	sigSongEnergyBorderGreat(),
 	sigSongEnergyEffReach(),
 	sigSongEnergyEdgeLine()
+};
+
+std::vector<void*> songEnergyBcArrays = {
+	sigSongEnergyBorderExcellent(),
+	sigSongEnergyBorderGreat(),
+	sigSongEnergyReach()
 };
 
 std::vector<void*> valueTextArrays = {

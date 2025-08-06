@@ -30,7 +30,7 @@ toml::v3::node_view<toml::v3::node> skinsList;
 std::vector<int> skinsIndices;
 
 const int sknMax = 58;
-const int idMax = 65535;
+
 bool isParsed = false;
 
 std::vector<std::string> hitEffectsVec = { "Default", "Classic", "Cute", "Cool", "Elegant", "Quirky" };
@@ -55,8 +55,9 @@ bool autoSkn;
 bool ArcMixModeOpt[3];
 bool ArcOpt[4];
 
-bool noSlides;
+//bool noSlides;
 bool xBarRank;
+bool xBarColors;
 bool enValue;
 bool judgementsValue;
 bool altFailed;
@@ -87,12 +88,12 @@ void FT_Compatibility() {
     }
 }
 
-void hit_effects_0x_x() {
+/*void hit_effects_0x_x() {
 
     const int offset = 0x09;
     WriteInMemory(HitEffLArrays, offset, { 0x00, 0x00 });
     WriteInMemory(HitEffRArrays, offset, { 0x00, 0x00 });
-}
+}*/
 
 void cloud_hit_effects(const std::string& hitEffect) {
 
@@ -152,6 +153,21 @@ void setSmallerTarget() {
     const int offset = 0x05;
     WriteInMemory(buttonArrays, offset, { 's' });
     WriteInMemory(targetArrays, offset, { 's' });
+}
+
+void NC_Compatibility() {
+
+    uintptr_t address = 0x14026E649;
+    uint8_t* ptr = reinterpret_cast<uint8_t*>(address);
+
+    // Check if that adress uses JMP to detect NC
+    if (ptr[0] == 0xE9 && ptr[1] == 0x07) {
+        std::cerr << "[X UI for MM+] New Classics detected. Colored and/or Smaller Targets settings are disabled.\n" << std::endl;
+    }
+    else {
+        if (coloredTarget) setColoredTarget();
+        if (smallerTarget) setSmallerTarget();
+    }
 }
 
 void fixFrameSkinSlide(__int8 skn = -1) {
@@ -253,7 +269,7 @@ const toml::array processArray(const toml::array& inputArray) {
 
         if (value.is_integer()) {
             int_value = value.as_integer()->get();
-            valid = (int_value >= 1 && int_value <= idMax);
+            valid = (int_value >= 1 && int_value <= UINT32_MAX);
         }
 
         if (valid) {
@@ -483,13 +499,14 @@ void checkOptionValues() {
         judgementsValue = (*arcOptArray)[0].value_or(false);
         coloredTarget = (*arcOptArray)[1].value_or(false);
         smallerTarget = (*arcOptArray)[2].value_or(false);
-        noSlides = (*arcOptArray)[3].value_or(false);
+        //noSlides = (*arcOptArray)[3].value_or(false);
+        xBarColors = (*arcOptArray)[3].value_or(false);
     }
     else {
         judgementsValue = false;
         coloredTarget = false;
         smallerTarget = false;
-        noSlides = false;
+        //noSlides = false;
     }
 }
 
@@ -517,9 +534,9 @@ extern "C" __declspec(dllexport) void Init() {
         handleParseException(exception);
     }
 
-    if (xBarRank) WriteInMemory(songEnergyBArrays, 0, { 'b' });
-
-    if (noSlides) hit_effects_0x_x();
+    if (xBarRank) WriteInMemory(songEnergyBrArrays, 0, { 'b' });
+    if (xBarColors) WriteInMemory(songEnergyBcArrays, 5, { 'a','l','t','v','e','r'});
+    //if (noSlides) hit_effects_0x_x();
 
     if (enValue) {
         judgmentsVals('c', 'o', 'm', 'e', 'n', true);
@@ -588,12 +605,11 @@ extern "C" __declspec(dllexport) void Init() {
 
     if (altFailed) WRITE_MEMORY(sigFailedInfo(), uint8_t, 'a', 'l', 't', 'e', 'r', 'n');
 
-    if (coloredTarget) setColoredTarget();
-    if (smallerTarget) setSmallerTarget();
 }
 
 //Use of PostInit() to check that the FT UI is used beforehand
 extern "C" __declspec(dllexport) void PostInit() {
 
     FT_Compatibility();
+    NC_Compatibility();
 }
