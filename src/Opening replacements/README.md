@@ -1,2 +1,2 @@
 # Opening replacements
-A plugin designed for the Opening replacements mod (by Paradichlorobenzene) which randomly set an opening on the adv and with the possibility to set a opening by default
+A plugin designed for the Opening replacements mod (by Paradichlorobenzene) which can set multiples opening on the adv and use alternate audio for DT 2nd/EX openings
