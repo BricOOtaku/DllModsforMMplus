@@ -32,6 +32,7 @@ std::vector<int> skinsIndices;
 const int sknMax = 58;
 
 bool isParsed = false;
+bool isArcade = true;
 
 std::vector<std::string> hitEffectsVec = { "Default", "Classic", "Cute", "Cool", "Elegant", "Quirky" };
 std::set<std::string> hitEffectsKeys(hitEffectsVec.begin(), hitEffectsVec.end());
@@ -67,6 +68,15 @@ bool smallerTarget;
 int currentSkin = 0;
 
 toml::table config;
+
+enum TargetMode {
+    ArcadeColored,
+    ArcadeSmaller,
+    ConsoleDisabled
+};
+
+const int offsetClr = 0x04;
+const int offsetSml = 0x05;
 
 void WriteInMemory(std::vector<void*> Arrays, int Offset, std::initializer_list<uint8_t> values) {
 
@@ -143,30 +153,35 @@ void judgmentsVals(unsigned char v1, unsigned char v2, unsigned char v3, unsigne
     }
 }
 
-void setColoredTarget() {
+void applyTargetMode(TargetMode mode) {
+    
+    switch (mode) {
+    case ArcadeColored:
+        WriteInMemory(targetArrays, offsetClr, { 'c' });
+        break;
 
-    WriteInMemory(targetArrays, 0x04, { 'c' });
-}
+    case ArcadeSmaller:
+        WriteInMemory(buttonArrays, offsetSml, { 's' });
+        WriteInMemory(targetArrays, offsetSml, { 's' });
+        break;
 
-void setSmallerTarget() {
-
-    const int offset = 0x05;
-    WriteInMemory(buttonArrays, offset, { 's' });
-    WriteInMemory(targetArrays, offset, { 's' });
+    case ConsoleDisabled:
+        WriteInMemory(targetArrays, offsetClr, { 'e' });
+        WriteInMemory(buttonArrays, offsetSml, { 'n' });
+        WriteInMemory(targetArrays, offsetSml, { 't' });
+        break;
+    }
 }
 
 void NC_Compatibility() {
-
-    uintptr_t address = 0x14026E649;
-    uint8_t* ptr = reinterpret_cast<uint8_t*>(address);
-
-    // Check if that adress uses JMP to detect NC
-    if (ptr[0] == 0xE9 && ptr[1] == 0x07) {
-        std::cerr << "[X UI for MM+] New Classics detected. Colored and/or Smaller Targets settings are disabled.\n" << std::endl;
+    
+    if (isArcade) {
+        if (coloredTarget) applyTargetMode(ArcadeColored);
+        if (smallerTarget) applyTargetMode(ArcadeSmaller);
     }
     else {
-        if (coloredTarget) setColoredTarget();
-        if (smallerTarget) setSmallerTarget();
+        std::cerr << "[X UI for MM+] Colored and/or Smaller Targets have been disabled for Console/Mixed" << std::endl;
+        applyTargetMode(ConsoleDisabled);
     }
 }
 
@@ -461,6 +476,42 @@ HOOK(void, __fastcall, _StartSong, sigStartSong(), int* a1, __int64 a2, char a3)
     return result;
 }*/
 
+/* Based on implementation from
+https://github.com/mrcloverthecoder/nc/blob/main/src/diva.cpp
+*/
+struct AetArgs {
+    uint32_t scene;
+    const char* layer;
+    int32_t prio;
+    int32_t marker_mode;
+};
+
+HOOK(void*, __fastcall, _createAetArgsAction, 0x14028D560,
+    AetArgs* args, uint32_t scene, const char* layer, int32_t prio, int32_t marker_mode)
+{
+    // This is not ideal but it's works for now
+    if (scene == 14010051 && layer && marker_mode == 2)
+    {
+        std::string layerStr(layer);
+        if (layerStr.find("console") != std::string::npos ||
+            layerStr.find("mixed") != std::string::npos)
+        {
+            /*
+            std::cerr << "[Hook] CreateAetArgsAction -> scene_id=" << std::dec << scene
+                << " | layer=" << layer
+                << " | prio=" << prio
+                << " | marker_mode=" << marker_mode
+                << std::endl;
+            */
+            isArcade = false;
+        }
+        else isArcade = true;
+        NC_Compatibility();
+    }
+
+    return original_createAetArgsAction(args, scene, layer, prio, marker_mode);
+}
+
 void patchLayersPriority(char* priorityPtr) {
 
     uint8_t* currentPriorityPtr = reinterpret_cast<uint8_t*>(priorityPtr + 0x03);
@@ -586,6 +637,8 @@ extern "C" __declspec(dllexport) void Init() {
         break;
     }
 
+    if (coloredTarget || smallerTarget) INSTALL_HOOK(_createAetArgsAction);
+
     if (autoHit || autoSkn) {
         INSTALL_HOOK(_PvDbRead);
         INSTALL_HOOK(_PvId);
@@ -611,5 +664,4 @@ extern "C" __declspec(dllexport) void Init() {
 extern "C" __declspec(dllexport) void PostInit() {
 
     FT_Compatibility();
-    NC_Compatibility();
 }
