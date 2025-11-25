@@ -353,33 +353,44 @@ std::vector<void*> targetArrays = {
 	sigTargetSpMaruSync(), sigTargetSpBatsuSync(), sigTargetSpShikakuSync(), sigTargetSpSankakuSync()
 };
 
+std::vector<void*> shadowArrays = {
+	sigShadowMaru(), sigShadowBatsu(), sigShadowShikaku(), sigShadowSankaku(),
+	sigShadowYbtn(), sigShadowAbtn(), sigShadowBbtn(), sigShadowXbtn(),
+	sigShadowSlideL18L(), sigShadowSlideL18R(), sigShadowSlideS25L(), sigShadowSlideS25R()
+};
+
+std::vector<void*> whiteArrays = {
+	sigWhiteMaru(), sigWhiteBatsu(), sigWhiteShikaku(), sigWhiteSankaku(),
+	sigWhiteYbtnSync(), sigWhiteAbtnSync(), sigWhiteBbtnSync(), sigWhiteXbtnSync(),
+	sigWhiteSlideL18L(), sigWhiteSlideL18R(), sigWhiteSlideS25L(), sigWhiteSlideS25R()
+};
+
+std::vector<void*> targetNoClrArrays = {
+	sigTargetYbtn(), sigTargetAbtn(), sigTargetBbtn(), sigTargetXbtn(),
+	sigTargetYbtnSync(), sigTargetAbtnSync(), sigTargetBbtnSync(), sigTargetXbtnSync(),
+	sigTargetYbtnHold(), sigTargetAbtnHold(), sigTargetBbtnHold(), sigTargetXbtnHold(),
+	sigTargetYbtnSynchold(), sigTargetAbtnSynchold(), sigTargetBbtnSynchold(), sigTargetXbtnSynchold(),
+	sigTargetSpYbtn(), sigTargetSpAbtn(), sigTargetSpBbtn(), sigTargetSpXbtn(),
+	sigTargetSpYbtnSync(), sigTargetSpAbtnSync(), sigTargetSpBbtnSync(), sigTargetSpXbtnSync(),
+
+	sigTargetSlide01Notxt(), sigTargetSlide18L(), sigTargetSlide18R(), sigTargetSlide26L(), sigTargetSlide26R(),
+	sigTargetSlideB18L(), sigTargetSlideB18R(), sigTargetSlideB26L(), sigTargetSlideB26R(),
+	sigTargetSlide18LSync(), sigTargetSlide18RSync(), sigTargetSlide26LSync(), sigTargetSlide26RSync(),
+	sigTargetSpSlide01Notxt(), sigTargetSpSlide18L(), sigTargetSpSlide18R(), sigTargetSpSlide18LSync(), sigTargetSpSlide18RSync(),
+};
+
 std::vector<void*> buttonArrays = {
 		sigButtonMaru(), sigButtonBatsu(), sigButtonShikaku(), sigButtonSankaku(),
 		sigButtonMaruSync(), sigButtonBatsuSync(), sigButtonShikakuSync(), sigButtonSankakuSync(),
-		sigShadowMaru(), sigShadowBatsu(), sigShadowShikaku(), sigShadowSankaku(),
-		sigWhiteMaru(), sigWhiteBatsu(), sigWhiteShikaku(), sigWhiteSankaku(),
-
+		
 		sigButtonYbtn(), sigButtonAbtn(), sigButtonBbtn(), sigButtonXbtn(),
 		sigButton2Ybtn(), sigButton2Abtn(), sigButton2Bbtn(),
 		sigButtonYbtnSync(), sigButtonAbtnSync(), sigButtonBbtnSync(), sigButtonXbtnSync(),
 		sigButton2YbtnSync(), sigButton2AbtnSync(), sigButton2BbtnSync(),
-		sigTargetYbtn(), sigTargetAbtn(), sigTargetBbtn(), sigTargetXbtn(),
-		sigTargetYbtnSync(), sigTargetAbtnSync(), sigTargetBbtnSync(), sigTargetXbtnSync(),
-		sigTargetYbtnHold(), sigTargetAbtnHold(), sigTargetBbtnHold(), sigTargetXbtnHold(),
-		sigTargetYbtnSynchold(), sigTargetAbtnSynchold(), sigTargetBbtnSynchold(), sigTargetXbtnSynchold(),
-		sigTargetSpYbtn(), sigTargetSpAbtn(), sigTargetSpBbtn(), sigTargetSpXbtn(),
-		sigTargetSpYbtnSync(), sigTargetSpAbtnSync(), sigTargetSpBbtnSync(), sigTargetSpXbtnSync(),
-		sigShadowYbtn(), sigShadowAbtn(), sigShadowBbtn(), sigShadowXbtn(),
-		sigWhiteYbtnSync(), sigWhiteAbtnSync(), sigWhiteBbtnSync(), sigWhiteXbtnSync(),
+
 
 		sigButtonSlide01(), sigButtonSlide18L(), sigButtonSlide18R(), sigButtonSlide25L(), sigButtonSlide25R(),
 		sigButtonSlide18LSync(), sigButtonSlide18RSync(), sigButtonSlide25LSync(), sigButtonSlide25RSync(),
-		sigTargetSlide01Notxt(), sigTargetSlide18L(), sigTargetSlide18R(), sigTargetSlide26L(), sigTargetSlide26R(),
-		sigTargetSlideB18L(), sigTargetSlideB18R(), sigTargetSlideB26L(), sigTargetSlideB26R(),
-		sigTargetSlide18LSync(), sigTargetSlide18RSync(), sigTargetSlide26LSync(), sigTargetSlide26RSync(),
-		sigTargetSpSlide01Notxt(), sigTargetSpSlide18L(), sigTargetSpSlide18R(), sigTargetSpSlide18LSync(), sigTargetSpSlide18RSync(),
-		sigShadowSlideL18L(), sigShadowSlideL18R(), sigShadowSlideS25L(), sigShadowSlideS25R(),
-		sigWhiteSlideL18L(), sigWhiteSlideL18R(), sigWhiteSlideS25L(), sigWhiteSlideS25R()
 };
 
 std::vector<void*> songEnergyBrArrays = {

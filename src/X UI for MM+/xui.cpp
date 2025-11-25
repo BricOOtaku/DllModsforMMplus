@@ -163,12 +163,19 @@ void applyTargetMode(TargetMode mode) {
     case ArcadeSmaller:
         WriteInMemory(buttonArrays, offsetSml, { 's' });
         WriteInMemory(targetArrays, offsetSml, { 's' });
+        WriteInMemory(targetNoClrArrays, offsetSml, { 's' });
+        WriteInMemory(whiteArrays, offsetSml, { 's' });
+        WriteInMemory(shadowArrays, offsetSml, { 's' });
+        
         break;
 
     case ConsoleDisabled:
         WriteInMemory(targetArrays, offsetClr, { 'e' });
         WriteInMemory(buttonArrays, offsetSml, { 'n' });
         WriteInMemory(targetArrays, offsetSml, { 't' });
+        WriteInMemory(targetNoClrArrays, offsetSml, { 't' });
+        WriteInMemory(whiteArrays, offsetSml, { '_' });
+        WriteInMemory(shadowArrays, offsetSml, { 'w' });
         break;
     }
 }
